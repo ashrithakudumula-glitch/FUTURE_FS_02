@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #18181f;
+      --border: #2a2a38;
+      --text: #f0f0f8;
+      --text2: #9898b0;
+      --text3: #5a5a72;
+      --accent: #6c63ff;
+      --accent2: #8b84ff;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 25%, rgba(108,99,255,0.1) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 75%, rgba(108,99,255,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Grid lines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .brand-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 16px var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .brand h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .brand p {
+      color: var(--text2);
+      font-size: 15px;
+    }
+
+    .form-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      margin-bottom: 7px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.12);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text3);
+    }
+
+    textarea { resize: vertical; min-height: 110px; }
+
+    select { cursor: pointer; }
+    select option { background: var(--bg3); }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: var(--accent2);
+      box-shadow: 0 0 30px rgba(108,99,255,0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #f87171;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .success-state {
+      text-align: center;
+      padding: 20px 0;
+      display: none;
+    }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(34,197,94,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .success-icon svg { color: var(--green); }
+
+    .success-state h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .success-state p { color: var(--text2); font-size: 14px; }
+
+    .privacy-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <h1>Get In Touch</h1>
+      <p>Fill out the form and we'll get back to you within 24 hours.</p>
+    </div>
+
+    <div class="form-card">
+      <div class="error-msg" id="errorMsg"></div>
+
+      <form id="contactForm">
+        <div class="row">
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 555 000 0000" />
+          </div>
+          <div class="form-group">
+            <label for="source">How did you find us?</label>
+            <select id="source" name="source">
+              <option value="website">Website</option>
+              <option value="referral">Referral</option>
+              <option value="social">Social Media</option>
+              <option value="email">Email</option>
+              <option value="event">Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" placeholder="Tell us how we can help you…" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Send Message
+        </button>
+      </form>
+
+      <!-- Success state -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h2>Message Sent!</h2>
+        <p>Thank you for reaching out. We'll be in touch with you shortly.</p>
+      </div>
+    </div>
+
+    <p class="privacy-note">🔒 Your information is kept private and never shared.</p>
+  </div>
+
+  <script>
+    // ── CONFIG: update this to your backend URL ──────────────
+    const API_URL = 'http://localhost:3001';
+    // ─────────────────────────────────────────────────────────
+
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successState = document.getElementById('successState');
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+      setTimeout(() => { errorMsg.style.display = 'none'; }, 6000);
+    }
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      submitBtn.innerHTML = on
+        ? '<span class="spinner"></span> Sending…'
+        : 'Send Message';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setLoading(true);
+
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        source: form.source.value,
+        message: form.message.value.trim(),
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/api/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          const errText = data.errors
+            ? data.errors.map(e => e.msg).join(', ')
+            : (data.error || 'Something went wrong.');
+          throw new Error(errText);
+        }
+
+        // Success
+        form.style.display = 'none';
+        successState.style.display = 'block';
+        form.reset();
+      } catch (err) {
+        showError(err.message || 'Network error. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
